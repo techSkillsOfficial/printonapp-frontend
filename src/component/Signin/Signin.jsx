@@ -1,14 +1,17 @@
-import React, { useState } from "react";
-import { ArrowRight } from "lucide-react";
-import BrandLogo from "../../assets/printonapp.png";
-import { Link, useNavigate } from "react-router-dom";
-import axios from "axios";
+import React, { useState } from 'react';
+import { ArrowRight } from 'lucide-react';
+import BrandLogo from '../../assets/printonapp.png';
+import { Link, useNavigate } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { login } from '../../store/action/auth.js';
 
 export function Signin() {
+  const dispatch = useDispatch();
   const navigate = useNavigate();
+  const auth = useSelector((state) => state.auth);
   const [formData, setFormData] = useState({
-    email: "",
-    password: "",
+    email: '',
+    password: '',
   });
 
   const handleInputChange = (e) => {
@@ -20,37 +23,9 @@ export function Signin() {
     console.log(formData);
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
-
-    try {
-      const response = await axios.post(
-        "http://54.159.212.143:4000/login",
-        formData,
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
-
-      // Handle the response as needed
-      console.log("API Response:", response.data);
-      const accessToken = response.data.data.access_token;
-
-      if (accessToken) {
-        // Save the access token to local storage
-        localStorage.setItem("access_token", accessToken);
-
-        // Redirect to another page or perform other actions
-        navigate("/Userdashboard");
-      } else {
-        console.error("Access token not found in API response.");
-      }
-    } catch (error) {
-      // Handle errors
-      console.error("API Error:", error);
-    }
+    dispatch(login(formData, navigate));
   };
 
   return (
