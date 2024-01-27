@@ -1,9 +1,9 @@
 import React, { useEffect } from "react";
 import { Menu, X, ChevronDown, ChevronRight } from "lucide-react";
 import BrandLogo from "../../assets/printonapp.png";
-import { Link,NavLink, useNavigate } from "react-router-dom";
+import { Link, NavLink, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from 'react-redux';
-import {logout } from "../../store/action/auth";
+import { logout } from "../../store/action/auth";
 
 const menuItems = [
   {
@@ -28,12 +28,13 @@ export function Navbar() {
     setIsMenuOpen(!isMenuOpen);
   };
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
+  const user = useSelector((state) => state.auth.user);
+  console.log("user",user)
 
-
-  const isAuth=()=>{
-    const token=localStorage.getItem("access_token")
-    console.log("token",token)
-    if(token){
+  const isAuth = () => {
+    const token = localStorage.getItem("access_token")
+    console.log("token", token)
+    if (token) {
       setIsAuthenticated(true)
       console.log("!!!!!!!!!!!!1")
       return true
@@ -41,14 +42,14 @@ export function Navbar() {
     console.log("@@@@@@@")
     return false
   }
-  const handleLogout=()=>{
+  const handleLogout = () => {
     localStorage.removeItem("access_token")
     dispatch(logout());
-    
+
     navigate("/home");
 
   }
-  
+
 
   return (
     <div className="relative w-full bg-gray-100">
@@ -75,24 +76,31 @@ export function Navbar() {
           </ul>
         </div>
         <div className="hidden space-x-2 lg:block">
-          {console.log("isAuth",isAuth)}
-        {isAuthenticated ? (
+          {isAuthenticated?(<Link
+              to="/userdashboard"
+              className="rounded-md border border-black px-3 py-2 text-sm font-semibold text-black shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black"
+            >Hi,{user.username}</Link>):<></>}
+        </div>
 
-    <button
-      type="button"
-      className="rounded-md border border-black px-3 py-2 text-sm font-semibold text-black shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black"
-      onClick={handleLogout}
-    >
-      Logout
-    </button>
-  ) : (
-    <Link
-      to="/signin"
-      className="rounded-md border border-black px-3 py-2 text-sm font-semibold text-black shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black"
-    >
-      Sign In
-    </Link>
-  )}
+        <div className="hidden space-x-2 lg:block">
+          {console.log("isAuth", isAuth)}
+          {isAuthenticated ? (
+
+            <button
+              type="button"
+              className="rounded-md border border-black px-3 py-2 text-sm font-semibold text-black shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black"
+              onClick={handleLogout}
+            >
+              Logout
+            </button>
+          ) : (
+            <Link
+              to="/signin"
+              className="rounded-md border border-black px-3 py-2 text-sm font-semibold text-black shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black"
+            >
+              Sign In
+            </Link>
+          )}
         </div>
         <div className="lg:hidden">
           <Menu onClick={toggleMenu} className="h-6 w-6 cursor-pointer" />

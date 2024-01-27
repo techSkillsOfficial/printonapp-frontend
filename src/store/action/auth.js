@@ -20,6 +20,17 @@ const loginFailure = (error) => ({
 });
 
 
+export const SIGNUP_REQUEST = 'SIGNUP_REQUEST';
+export const SIGNUP_SUCCESS = 'SIGNUP_SUCCESS';
+export const SIGNUP_FAILURE = 'SIGNUP_FAILURE';
+
+// Action creators
+export const signupRequest = () => ({ type: SIGNUP_REQUEST });
+export const signupSuccess = (user) => ({ type: SIGNUP_SUCCESS, payload: user });
+export const signupFailure = (error) => ({ type: SIGNUP_FAILURE, payload: error });
+
+
+
 export const logout = () => {
     return {
       type: 'LOGOUT',
@@ -66,3 +77,44 @@ export const login = (formData, navigate) => {
     }
   };
 };
+
+
+export const signup = (formData, navigate) => {
+    return async (dispatch) => {
+      dispatch(signupRequest());
+      console.log("222",formData)
+  
+      try {
+        const response = await axios.post(
+          'http://54.159.212.143:4000/signup', // Adjust the endpoint
+          formData,
+          {
+            headers: {
+              'Content-Type': 'application/json',
+            },
+          }
+        );
+          
+        
+        //const accessToken = response.data.data.access_token;
+          console.log("response.data",response.data)
+        if (response.data.status==201) {
+          //localStorage.setItem('access_token', accessToken);
+          console.log("response.data.status",response.data.status)
+          const user = { username: formData.firstName};
+  
+          dispatch(signupSuccess(user));
+  
+          // Redirect to another page or perform other actions
+          // navigate('/signin');
+        } else {
+          console.error('Access token not found in API response.');
+        }
+      } catch (error) {
+        dispatch(signupFailure(error));
+  
+        // Handle errors
+        console.error('API Error:', error);
+      }
+    };
+  };
