@@ -16,7 +16,7 @@ export function Signup() {
     confirmPassword: "",
     phone: "",
     role:"USER",
-    collegeId: "", // College ID will be selected from the dropdown
+    collegeId: "", // College Name will be selected from the dropdown
   });
   const [showPopup, setShowPopup] = useState(false);
   const signupStatus = useSelector((state) => state.auth.signupStatus);
@@ -227,7 +227,7 @@ export function Signup() {
                     className="text-base font-medium text-gray-900"
                   >
                     {" "}
-                    College ID{" "}
+                    College Name{" "}
                   </label>
                 </div>
                 <div className="mt-2">
@@ -237,7 +237,7 @@ export function Signup() {
         onChange={handleInputChange}
         className="flex h-10 w-full rounded-md border border-gray-300 bg-transparent px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-gray-400 focus:ring-offset-1 disabled:cursor-not-allowed disabled:opacity-50"
       >
-        <option value="">Select College ID</option>
+        <option value="">Select College Name</option>
         {loadingColleges ? (
           <option value="" disabled>Loading Colleges...</option>
         ) : (
