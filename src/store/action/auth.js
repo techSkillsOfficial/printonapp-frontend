@@ -46,7 +46,7 @@ export const login = (formData, navigate) => {
 
     try {
       const response = await axios.post(
-        'http://54.159.212.143:4000/login',
+        'https://printonapp-gacom.ondigitalocean.app/login',
         formData,
         {
           headers: {
@@ -86,7 +86,7 @@ export const signup = (formData, navigate) => {
   
       try {
         const response = await axios.post(
-          'http://54.159.212.143:4000/signup', // Adjust the endpoint
+          'https://printonapp-gacom.ondigitalocean.app/signup', // Adjust the endpoint
           formData,
           {
             headers: {

@@ -48,7 +48,7 @@ export function Signup() {
   useEffect(() => {
     const fetchColleges = async () => {
       try {
-        const response = await axios.get('http://54.159.212.143:4000/homepage/colleges');
+        const response = await axios.get('https://printonapp-gacom.ondigitalocean.app/homepage/colleges');
         console.log("response.dataresponse.data",response.data)
         setColleges(response.data.data); // assuming the response is an array of colleges
       } catch (error) {
