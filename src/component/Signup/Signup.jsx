@@ -6,6 +6,7 @@ import { signup } from "../../store/action/auth";
 import { useDispatch, useSelector } from "react-redux";
 import PopupComponent from "../popup/popup";
 import axios from "axios";
+import Loader from "../Loader/Loader";
 
 export function Signup() {
   const [formData, setFormData] = useState({
@@ -19,6 +20,9 @@ export function Signup() {
     collegeId: "", // College Name will be selected from the dropdown
   });
   const [showPopup, setShowPopup] = useState(false);
+  const isLoading = useSelector((state) => state.auth.loading);
+  const [popupMessage, setPopupMessage] = useState('');
+
   const signupStatus = useSelector((state) => state.auth.signupStatus);
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -35,12 +39,18 @@ export function Signup() {
     e.preventDefault();
     const { confirmPassword, ...signupData } = formData;
     console.log("1111")
-    // Call the signup action with signupData
-    dispatch(signup(signupData, navigate));
+    
+    dispatch(signup(signupData, navigate)).then(() => {
+      
+      if (signupStatus) {
+        setShowPopup(true);
+      }
+      setPopupMessage("Account Created Succesfull !!!")
+    });
     console.log("signupStatus",signupStatus)
-    if(signupStatus){
-      setShowPopup(true);
-    }
+    // if(signupStatus){
+    //   setShowPopup(true);
+    // }
   };
   const [colleges, setColleges] = useState([]);
   const [loadingColleges, setLoadingColleges] = useState(true);
@@ -264,8 +274,10 @@ export function Signup() {
           </form>
         </div>
       </div>
-      {showPopup && <PopupComponent onClose={handleClosePopup } />}
-   
+      {isLoading&&<Loader/>}
+
+      {showPopup && <PopupComponent onClose={handleClosePopup} isSuccess={true} message={popupMessage} />}
+
     </section>
     
   );

@@ -1,6 +1,11 @@
+import axios from "axios";
 import { Bold } from "lucide-react";
 import React, { useState } from "react";
 import { pdfjs } from "react-pdf";
+import { useSelector } from "react-redux";
+import PopupComponent from "../../popup/popup";
+import { useNavigate } from "react-router-dom";
+import Loader from "../../Loader/Loader";
 
 const Thesisform = () => {
   const [printColor, setPrintColor] = useState("B&W");
@@ -12,10 +17,14 @@ const Thesisform = () => {
   const [numPages, setNumPages] = useState(null);
   const [pricePerColorPage, setPricePerColorPage] = useState(7); // Default price for Color page
   const [selectedQty, setSelectedQty] = useState("");
-
+  const token = useSelector((state) => state.auth.user.username.access_token)
+  const [showPopup, setshowPopup] = useState(false)
+  const [popupMessage, setPopupMessage] = useState('');
+  const [filepath,setfilepath]=useState('')
+  const [loading,setloading]=useState(false)
   // Calculate the base price for hard binding
   let tempTotalPrice = 200;
-
+  const navigate = useNavigate();
   // Calculate price based on paper type
   const ShowPrice = () => {
     // Calculate the base price for hard binding
@@ -24,10 +33,10 @@ const Thesisform = () => {
     // Calculate price based on paper type
     if (paperType === "Bond") {
       calculatedTotalPrice +=
-        numPages * (printColor === "B&W" ? 2.5 : pricePerColorPage);
+        numPages * (printColor === "B&W" ? 3 : 8);
     } else {
       calculatedTotalPrice +=
-        numPages * (printColor === "B&W" ? 1 : pricePerColorPage);
+        numPages * (printColor === "B&W" ? 2 : 7);
     }
 
     // Add additional calculations or conditions as needed based on other form inputs
@@ -44,6 +53,10 @@ const Thesisform = () => {
     if (file && file.type === "application/pdf") {
       setPdfFile(file);
       calculateNumPages(file);
+
+      
+      console.log("token",token)
+      
     } else {
       // Reset state if the selected file is not a PDF
       setPdfFile(null);
@@ -61,12 +74,109 @@ const Thesisform = () => {
     };
     reader.readAsArrayBuffer(file);
   };
-
-  const handleOrderSubmit = (e) => {
-    e.preventDefault();
-    // Handle form submission logic here
-    // You can access form data in the state variables, including numPages
+  const handleClosePopup = () => {
+    console.log("MPP")
+    navigate("/userdashboard");
   };
+
+  const handleOrderSubmit = async (e) => {
+    e.preventDefault();
+
+    if (!pdfFile) {
+      return;
+    }
+    // const formDatapdf = new FormData();
+    // formDatapdf.append('pdf', pdfFile);
+    // axios.post('https://printonapp-gacom.ondigitalocean.app/admin/upload-pdf', formDatapdf, {
+    //     headers: {
+          
+    //       Authorization: `Bearer ${token}`
+    //     },
+    //   })
+    //     .then(response => {
+    //       // Handle successful upload
+    //       console.log('PDF file uploaded successfully:', response.data);
+    //       setfilepath(response.data.data.path)
+    //     })
+    //     .catch(error => {
+    //       // Handle upload error
+    //       console.error('Error uploading PDF file:', error);
+    //     });
+
+
+    
+
+
+    console.log("token", token);
+    try {
+      setloading(true)
+      const formDatapdf = new FormData();
+      formDatapdf.append('pdf', pdfFile);
+
+      const pdfUploadResponse = await axios.post(
+        'https://printonapp-gacom.ondigitalocean.app/admin/upload-pdf',
+        formDatapdf,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`
+          },
+        }
+      );
+  
+      // Handle successful PDF upload
+      console.log('PDF file uploaded successfully:', pdfUploadResponse.data.data.path);
+      setfilepath(pdfUploadResponse.data.data.path);
+
+      const formData = {
+        color: printColor,
+        paper_type: paperType,
+        description: description,
+        quantity: +selectedQty,
+        estimate_cost: totalPrice,
+        pdf: pdfUploadResponse.data.data.path
+  
+        // Add other form fields as needed
+      };
+
+      const response = await axios.post(
+        'https://printonapp-gacom.ondigitalocean.app/admin/thesis',
+        formData,
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`
+          },
+        }
+      );
+      // const response = await fetch('https://printonapp-gacom.ondigitalocean.app/admin/thesis', {
+      //   method: "POST",
+      //   headers: {
+      //     "Content-Type": "application/json",
+      //     Authorisation:`Bearer ${token}`
+      //   },
+
+      //   body: JSON.stringify(formData),
+      // });
+
+      // Handle the response from the server, e.g., show a success message or redirect
+      console.log("response", response)
+      if (response.data.status == 201) {
+        console.log("!!!!!!");
+        setshowPopup(true)
+        setPopupMessage(response.data.data)
+      }
+      else {
+
+      }
+    } catch (error) {
+      console.error("Error submitting order:", error);
+      // Handle any errors that occurred during the submission process
+    }
+    finally{
+      setloading(false)
+    }
+  };
+
 
   return (
     <div className="max-w-2xl mx-auto p-6">
@@ -231,17 +341,19 @@ const Thesisform = () => {
         <div className="mb-4">
           <button
             type="submit"
+            onSubmit={() => { handleOrderSubmit() }}
             disabled={!pdfFile} // Disable the button if no PDF file is selected
-            className={`${
-              {pdfFile }
+            className={`${{ pdfFile }
                 ? "bg-indigo-500 hover:bg-indigo-600"
                 : "bg-gray-300 cursor-not-allowed"
-            } text-white py-2 px-4 rounded-md focus:outline-none focus:ring focus:border-indigo-300`}
+              } text-white py-2 px-4 rounded-md focus:outline-none focus:ring focus:border-indigo-300`}
           >
             Order
           </button>
         </div>
       </form>
+      {loading&&<Loader/>}
+      {showPopup && <PopupComponent onClose={handleClosePopup} isSuccess={true} message={popupMessage} />}
     </div>
   );
 };

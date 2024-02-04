@@ -60,7 +60,7 @@ export const login = (formData, navigate) => {
       if (accessToken) {
         localStorage.setItem('access_token', accessToken);
 
-        const user = { username: formData.email };
+        const user = { username: response.data.data};
 
         dispatch(loginSuccess(user));
 
@@ -86,7 +86,7 @@ export const signup = (formData, navigate) => {
   
       try {
         const response = await axios.post(
-          'https://printonapp-gacom.ondigitalocean.app/signup', // Adjust the endpoint
+          'https://printonapp-gacom.ondigitalocean.app/signup',
           formData,
           {
             headers: {

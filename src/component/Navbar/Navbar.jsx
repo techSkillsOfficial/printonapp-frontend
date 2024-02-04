@@ -28,7 +28,8 @@ export function Navbar() {
     setIsMenuOpen(!isMenuOpen);
   };
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
-  const user = useSelector((state) => state.auth.user);
+  const user = useSelector((state) => state.auth?.user?.username);
+  //const user=authuser?.first_name
   console.log("user",user)
 
   const isAuth = () => {

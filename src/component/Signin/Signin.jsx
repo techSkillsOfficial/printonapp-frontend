@@ -4,11 +4,14 @@ import BrandLogo from '../../assets/printonapp.png';
 import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { login } from '../../store/action/auth.js';
+import Loader from '../Loader/Loader.jsx';
 
 export function Signin() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const auth = useSelector((state) => state.auth);
+  const isLoading = useSelector((state) => state.auth.loading);
+  
   const [formData, setFormData] = useState({
     email: '',
     password: '',
@@ -113,6 +116,7 @@ export function Signin() {
           </form>
         </div>
       </div>
+      {isLoading&&<Loader/>}
     </section>
   );
 }
