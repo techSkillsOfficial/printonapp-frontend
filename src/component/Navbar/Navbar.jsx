@@ -76,11 +76,11 @@ export function Navbar() {
             ))}
           </ul>
         </div>
-        <div className="hidden space-x-2 lg:block">
+        <div className="hidden space-x-2 lg:block m-4">
           {isAuthenticated?(<Link
               to="/userdashboard"
-              className="rounded-md border border-black px-3 py-2 text-sm font-semibold text-black shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black"
-            >Hi,{user.username}</Link>):<></>}
+              className=" px-3 py-2 text-sm font-semibold text-black  focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black hover:animate-pulse"
+            >{(user.first_name).toUpperCase()}</Link>):<></>}
         </div>
 
         <div className="hidden space-x-2 lg:block">

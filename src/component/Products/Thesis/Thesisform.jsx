@@ -225,10 +225,10 @@ const Thesisform = () => {
 
         {/* Price Chart Section (assuming it's a separate component) */}
         {/* Please replace this with your actual price chart component */}
-        <div className="mb-4">
+        {/* <div className="mb-4">
           <p className="text-lg font-semibold mb-2">Price Chart</p>
-          {/* Your price chart component goes here */}
-        </div>
+          
+        </div> */}
 
         {/* Paper Type Section */}
         <div className="mb-4">
@@ -254,7 +254,7 @@ const Thesisform = () => {
         <div className="mb-4">
           <label
             htmlFor="pdfFile"
-            className="block text-sm font-medium text-gray-700"
+            className="block text-sm font-medium text-gray-700 mb-2"
           >
             Upload PDF
           </label>
@@ -264,7 +264,13 @@ const Thesisform = () => {
             name="pdfFile"
             onChange={handlePdfFileChange}
             accept=".pdf"
-            className="mt-1 block w-full"
+            className="block w-full text-sm text-slate-500
+            file:mr-4 file:py-2 file:px-4
+            file:rounded-lg file:border-0
+            file:text-sm file:font-semibold
+            file:bg-gray-700 file:text-white
+            hover:file:bg-black"
+            // className="mt-1 block w-full"
           />
           {pdfFile && numPages && (
             <div className="mt-2 text-sm text-green-900">
@@ -302,7 +308,8 @@ const Thesisform = () => {
             id="quantity"
             name="quantity"
             value={selectedQty}
-            onChange={(e) => setSelectedQty(e.target.value)}
+            onChange={(e) => {setSelectedQty(e.target.value)}}
+            onMouseOut={() => ShowPrice()}
             className="mt-1 block w-full border rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
           >
             <option value="" disabled>
@@ -322,19 +329,19 @@ const Thesisform = () => {
             htmlFor="totalPrice"
             className="block text-sm font-medium text-gray-700"
           >
-            Total Price
+            Estimated Price
           </label>
           <span className="inline-block mt-1 px-3 py-2 text-lg font-semibold text-gray-800 bg-gray-100 border rounded-md">
             ₹{totalPrice}
           </span>
           {/* calculate amount  */}
-          <button
+          {/* <button
             type="button"
             onClick={() => ShowPrice()}
             className="mt-2 bg-green-500 hover:bg-green-600 text-white text-sm py-1 px-2 rounded-md focus:outline-none focus:ring focus:border-indigo-300 transition duration-300 ease-in-out ml-10 "
           >
             Calculate Amount
-          </button>
+          </button> */}
         </div>
 
         {/* Order Button Section */}
