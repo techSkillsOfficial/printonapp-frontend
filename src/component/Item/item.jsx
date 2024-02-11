@@ -18,7 +18,7 @@ export function Item({title,imageUrl}) {
     }
   return (
     <div className=" p-4">
-      <div className="w-full max-w-[your-custom-width] mx-auto relative aspect-[16/9] h-[400px]">
+      <div className="w-[300px] max-w-[your-custom-width] mx-auto relative aspect-[16/9] h-[300px]">
         <img
           src={imageUrl}
           alt={title}
@@ -32,7 +32,7 @@ export function Item({title,imageUrl}) {
           </p>
           {title=="Thesis and Dissertation"?
           (<button onClick={handleNavigate} className="mt-2 inline-flex cursor-pointer items-center text-sm font-semibold">
-            Visit &rarr;
+            Order now &rarr;
           </button>):(<></>)}
         </div>
       </div>

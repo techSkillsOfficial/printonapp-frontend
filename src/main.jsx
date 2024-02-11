@@ -23,14 +23,14 @@ import store from "./store/store.js";
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path="/" element={<Layout />}>
-      <Route path="" element={<Signup />} />
+      <Route path="" element={<Home />} />
       <Route path="signin" element={<Signin />} />
       <Route path="signup" element={<Signup />} />
       <Route path="home" element={<Home />} />
       <Route path="about" element={<About />} />
       <Route path="contact" element={<Contact />} />
-      <Route path="Userdashboard" element={<Userdashboard />}/>
-      <Route path="thesisform" element={<Thesisform/>} />
+      <Route path="Userdashboard" element={<Userdashboard />} />
+      <Route path="thesisform" element={<Thesisform />} />
       {/* </Route> */}
     </Route>
   )
@@ -39,7 +39,7 @@ const router = createBrowserRouter(
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
     <Provider store={store}>
-    <RouterProvider router={router} />
+      <RouterProvider router={router} />
     </Provider>
   </React.StrictMode>
 );

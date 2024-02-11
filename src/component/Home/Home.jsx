@@ -1,6 +1,7 @@
 import React from 'react'
 // import {BackgroundImage} from "../../assets/BackgroundImage.jpg"
 import { Item } from './../Item/item';
+import ShuffleHero from './SuffleHero';
 
 export const Home = () => {
   const itemsData = [
@@ -26,11 +27,7 @@ export const Home = () => {
     <div className="relative w-full bg-white mt-2">
       <div >
         <div>
-          <img
-            className="w-full h-64 object-cover"
-            src="https://images.unsplash.com/photo-1513142792563-533e394a6278?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTY4fHxwcmludHxlbnwwfDB8MHx8fDA%3D"
-            alt=""
-          />
+          <ShuffleHero></ShuffleHero>
         </div>
 
 
