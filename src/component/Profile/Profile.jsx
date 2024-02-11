@@ -22,7 +22,7 @@ export function Profile() {
             <img
               src="data:image/png;base64,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"
               alt="Laptop"
-              className="h-[300px] w-full rounded-t-md object-cover"
+              className="h-[200px] w-[180px] rounded-t-md object-cover"
             />
             <div className="p-4">
               <h1 className="text-lg font-semibold">{name}</h1>
@@ -30,7 +30,7 @@ export function Profile() {
               <p className="mt-3 text-sm text-gray-600">
                 Lorem ipsum dolor sit amet consectetur adipisicing elit. Excepturi, debitis?
               </p>
-              <div className="mt-4 flex flex-wrap">
+              {/* <div className="mt-4 flex flex-wrap">
                 <div className="w-auto p-1.5">
                   <a href="#">
                     <div className="flex h-8 w-8 items-center justify-center rounded-full border border-gray-300 hover:border-gray-400">
@@ -85,7 +85,7 @@ export function Profile() {
                     </div>
                   </a>
                 </div>
-              </div>
+              </div> */}
             </div>
           </div>
         ))}

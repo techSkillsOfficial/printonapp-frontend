@@ -28,7 +28,7 @@ const authReducer = (state = storedState||initialState, action) => {
     case 'LOGIN_FAILURE':
       return { ...state, loading: false, error: action.payload };
     case 'SIGNUP_FAILURE':
-      return { ...state, loading: false, error: action.payload };
+      return { ...state, loading: false, error: action.payload,signupStatus: false };
     case 'LOGOUT':
       localStorage.removeItem('authState');
       return { ...initialState };

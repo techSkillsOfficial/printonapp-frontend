@@ -1,20 +1,32 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { ArrowRight } from 'lucide-react';
 import BrandLogo from '../../assets/printonapp.png';
 import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { login } from '../../store/action/auth.js';
 import Loader from '../Loader/Loader.jsx';
+import PopupComponent from '../popup/popup.jsx';
 
 export function Signin() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const auth = useSelector((state) => state.auth);
   const isLoading = useSelector((state) => state.auth.loading);
+  const error=useSelector((state) => state.auth.error);
+  const [showerrorpopup,setshowerrorpopup]=useState(false);
+  console.log("error",error)
+  const [validationErrors, setValidationErrors] = useState({
+    email: '',
+    password: '',
+  });
   
   const [formData, setFormData] = useState({
     email: '',
     password: '',
+  });
+  const [touched, setTouched] = useState({
+    email: false,
+    password: false,
   });
 
   const handleInputChange = (e) => {
@@ -24,11 +36,43 @@ export function Signin() {
       [name]: value,
     }));
     console.log(formData);
+    setTouched((prevTouched) => ({
+      ...prevTouched,
+      [name]: true,
+    }));
   };
+
+  useEffect(() => {
+    const errors = {};
+    if (!formData.email.trim()) {
+      errors.email = 'Email is required';
+    } else {
+      errors.email = '';
+    }
+
+    if (!formData.password.trim()) {
+      errors.password = 'Password is required';
+    } else {
+      errors.password = '';
+    }
+
+    setValidationErrors(errors);
+  }, [formData, touched]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    dispatch(login(formData, navigate));
+    console.log("error?.response?.data",error?.response?.data)
+    if (!validationErrors.email && !validationErrors.password) {
+      dispatch(login(formData, navigate));
+    }
+
+    if(error){
+      setshowerrorpopup(true);
+    }
+  };
+  const handleerrorPopup = () => {
+    setshowerrorpopup(false);
+    
   };
 
   return (
@@ -73,6 +117,9 @@ export function Signin() {
                     value={formData.email}
                     onChange={handleInputChange}
                   ></input>
+                  {validationErrors.email && (
+                    <p className="text-red-500">{validationErrors.email}</p>
+                  )}
                 </div>
               </div>
               <div>
@@ -102,6 +149,9 @@ export function Signin() {
                     name="password"
                     onChange={handleInputChange}
                   ></input>
+                  {validationErrors.password && (
+                    <p className="text-red-500">{validationErrors.password}</p>
+                  )}
                 </div>
               </div>
               <div>
@@ -117,6 +167,8 @@ export function Signin() {
         </div>
       </div>
       {isLoading&&<Loader/>}
+      {showerrorpopup&& <PopupComponent onClose={handleerrorPopup} isSuccess={false} message={error?.response?.data?.error} />}
+
     </section>
   );
 }

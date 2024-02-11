@@ -9,10 +9,11 @@ import Userdashboard from "./Dashboard/Userdashboard.jsx";
 import { Profile } from "./Profile/Profile.jsx";
 import { Thesis } from "./Products/Thesis/Thesis.jsx";
 import Thesisform from "./Products/Thesis/Thesisform.jsx"
+import Order from "./Order/Order.jsx"
 
 
 
 
 
 
-export { Navbar, Footer, Signin, Signup, Home, About, Contact, Userdashboard,Profile,Thesis,Thesisform } 
+export { Navbar, Footer, Signin, Signup, Home, About, Contact, Userdashboard,Profile,Thesis,Thesisform ,Order} 

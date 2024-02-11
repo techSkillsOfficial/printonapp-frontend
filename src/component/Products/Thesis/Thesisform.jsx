@@ -1,6 +1,6 @@
 import axios from "axios";
 import { Bold } from "lucide-react";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { pdfjs } from "react-pdf";
 import { useSelector } from "react-redux";
 import PopupComponent from "../../popup/popup";
@@ -22,6 +22,8 @@ const Thesisform = () => {
   const [popupMessage, setPopupMessage] = useState('');
   const [filepath,setfilepath]=useState('')
   const [loading,setloading]=useState(false)
+  const [errors, setErrors] = useState({});
+
   // Calculate the base price for hard binding
   let tempTotalPrice = 200;
   const navigate = useNavigate();
@@ -47,6 +49,47 @@ const Thesisform = () => {
 
   // Load the PDF worker script dynamically
   pdfjs.GlobalWorkerOptions.workerSrc = `https://unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.js`;
+
+
+  
+
+    const validateForm = () => {
+      let formIsValid = true;
+      const errors = {};
+  
+      if (!printColor) {
+        errors.printColor = "Please choose print color.";
+        formIsValid = false;
+      }
+  
+      if (printColor === "Both" && !colorPages) {
+        errors.colorPages = "Please enter the page number which you need to color.";
+        formIsValid = false;
+      }
+  
+      if (!paperType) {
+        errors.paperType = "Please choose paper type.";
+        formIsValid = false;
+      }
+  
+      if (!pdfFile) {
+        errors.pdfFile = "Please upload a PDF file.";
+        formIsValid = false;
+      }
+  
+      if (!selectedQty) {
+        errors.selectedQty = "Please select quantity.";
+        formIsValid = false;
+      }
+  
+      setErrors(errors);
+      return formIsValid;
+    };
+
+    useEffect(()=>{
+      validateForm()
+  },[selectedQty,pdfFile,paperType,printColor])
+
 
   const handlePdfFileChange = (e) => {
     const file = e.target.files[0];
@@ -108,6 +151,7 @@ const Thesisform = () => {
 
 
     console.log("token", token);
+    if (validateForm()) {
     try {
       setloading(true)
       const formDatapdf = new FormData();
@@ -175,6 +219,7 @@ const Thesisform = () => {
     finally{
       setloading(false)
     }
+  }
   };
 
 
@@ -201,6 +246,7 @@ const Thesisform = () => {
             <option value="Color">Color</option>
             <option value="Both">Both</option>
           </select>
+          {errors.printColor && <p className="text-red-500">{errors.printColor}</p>}
         </div>
 
         {/* Color Pages Section */}
@@ -220,6 +266,7 @@ const Thesisform = () => {
               onChange={(e) => setColorPages(e.target.value)}
               className="mt-1 block w-full border rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
             />
+            {errors.colorPages && <p className="text-red-500">{errors.colorPages}</p>}
           </div>
         )}
 
@@ -248,6 +295,7 @@ const Thesisform = () => {
             <option value="Bond">Bond</option>
             <option value="Normal">Normal</option>
           </select>
+          {errors.paperType && <p className="text-red-500">{errors.paperType}</p>}
         </div>
 
         {/* PDF Upload Section */}
@@ -272,6 +320,7 @@ const Thesisform = () => {
             hover:file:bg-black"
             // className="mt-1 block w-full"
           />
+          {errors.pdfFile && <p className="text-red-500">{errors.pdfFile}</p>}
           {pdfFile && numPages && (
             <div className="mt-2 text-sm text-green-900">
               Selected PDF with <>{numPages}</> pages.
@@ -321,6 +370,7 @@ const Thesisform = () => {
               </option>
             ))}
           </select>
+          {errors.selectedQty && <p className="text-red-500">{errors.selectedQty}</p>}
         </div>
 
         {/* Total Price Section */}

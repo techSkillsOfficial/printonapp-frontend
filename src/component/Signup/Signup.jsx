@@ -16,12 +16,15 @@ export function Signup() {
     password: "",
     confirmPassword: "",
     phone: "",
-    role:"USER",
+    role: "USER",
     collegeId: "", // College Name will be selected from the dropdown
   });
   const [showPopup, setShowPopup] = useState(false);
   const isLoading = useSelector((state) => state.auth.loading);
   const [popupMessage, setPopupMessage] = useState('');
+  const [validationErrors, setValidationErrors] = useState({});
+  const signupError = useSelector((state) => state.auth.error);
+  const [showerrorpopup,setshowerrorpopup]=useState(false);
 
   const signupStatus = useSelector((state) => state.auth.signupStatus);
   const handleInputChange = (e) => {
@@ -33,21 +36,94 @@ export function Signup() {
     }));
     console.log(formData);
   };
+
+  useEffect(() => {
+    const errors = {};
+    if (!formData.first_name.trim()) {
+      errors.first_name = "First name is required";
+    }
+    if (!formData.last_name.trim()) {
+      errors.last_name = "Last name is required";
+    }
+    if (!formData.email.trim()) {
+      errors.email = "Email is required";
+    } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
+      errors.email = "Email is invalid";
+    }
+    if (!formData.phone.trim()) {
+      errors.phone = "Phone number is required";
+    } else if (!/^\d{10}$/.test(formData.phone)) {
+      errors.phone = "Phone number is invalid";
+    }
+    if (!formData.password.trim()) {
+      errors.password = "Password is required";
+    } else if (formData.password.length < 6) {
+      errors.password = "Password must be at least 6 characters";
+    }
+    if (formData.password !== formData.confirmPassword) {
+      errors.confirmPassword = "Passwords do not match";
+    }
+    if (!formData.collegeId) {
+      errors.collegeId = "College name is required";
+    }
+
+    setValidationErrors(errors);
+  }, [formData]);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const handleSubmit = (e) => {
-    e.preventDefault();
-    const { confirmPassword, ...signupData } = formData;
-    console.log("1111")
+    // const errors = {};
+    // if (!formData.first_name.trim()) {
+    //   errors.first_name = "First name is required";
+    // }
+    // if (!formData.last_name.trim()) {
+    //   errors.last_name = "Last name is required";
+    // }
+    // if (!formData.email.trim()) {
+    //   errors.email = "Email is required";
+    // } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
+    //   errors.email = "Email is invalid";
+    // }
+    // if (!formData.phone.trim()) {
+    //   errors.phone = "Phone number is required";
+    // } else if (!/^\d{10}$/.test(formData.phone)) {
+    //   errors.phone = "Phone number is invalid";
+    // }
+    // if (!formData.password.trim()) {
+    //   errors.password = "Password is required";
+    // } else if (formData.password.length < 6) {
+    //   errors.password = "Password must be at least 6 characters";
+    // }
+    // if (formData.password !== formData.confirmPassword) {
+    //   errors.confirmPassword = "Passwords do not match";
+    // }
+    // if (!formData.collegeId) {
+    //   errors.collegeId = "College name is required";
+    // }
+    //console.log("signupError",signupError.response.data.error)
     
+    e.preventDefault();
+    if (Object.keys(validationErrors).length === 0) {
+
+    
+    const { confirmPassword, ...signupData } = formData;
+    console.log("1111",signupError?.response?.data?.error)
+
     dispatch(signup(signupData, navigate)).then(() => {
-      
+      console.log("state.auth.signupStatus",signupStatus)
       if (signupStatus) {
         setShowPopup(true);
       }
       setPopupMessage("Account Created Succesfull !!!")
+
+      if(signupError?.response?.data?.error){
+        setshowerrorpopup(true)
+      }
     });
-    console.log("signupStatus",signupStatus)
+    
+    
+  }
+    console.log("signupStatus", signupStatus)
     // if(signupStatus){
     //   setShowPopup(true);
     // }
@@ -59,7 +135,7 @@ export function Signup() {
     const fetchColleges = async () => {
       try {
         const response = await axios.get('https://printonapp-gacom.ondigitalocean.app/homepage/colleges');
-        console.log("response.dataresponse.data",response.data)
+        console.log("response.dataresponse.data", response.data)
         setColleges(response.data.data); // assuming the response is an array of colleges
       } catch (error) {
         console.error('Error fetching colleges:', error);
@@ -75,7 +151,12 @@ export function Signup() {
     // Navigate to the "signin" route
     navigate("/signin");
   };
-  
+
+  const handleerrorPopup = () => {
+    setshowerrorpopup(false);
+    
+  };
+
   return (
     <section>
       <div className="flex items-center justify-center px-4 py-10 sm:px-6 sm:py-16 lg:px-8 lg:py-24">
@@ -117,7 +198,9 @@ export function Signup() {
                     name="first_name"
                     value={formData.first_name}
                     onChange={handleInputChange}
+
                   ></input>
+                  {validationErrors.first_name && <p className="text-red-500">{validationErrors.first_name}</p>}
                 </div>
               </div>
               <div>
@@ -140,6 +223,8 @@ export function Signup() {
                     value={formData.last_name}
                     onChange={handleInputChange}
                   ></input>
+                  {validationErrors.last_name && <p className="text-red-500">{validationErrors.last_name}</p>}
+
                 </div>
               </div>
               <div>
@@ -162,6 +247,8 @@ export function Signup() {
                     value={formData.email}
                     onChange={handleInputChange}
                   ></input>
+                  {validationErrors.email && <p className="text-red-500">{validationErrors.email}</p>}
+
                 </div>
               </div>
               <div>
@@ -184,6 +271,8 @@ export function Signup() {
                     value={formData.phone}
                     onChange={handleInputChange}
                   ></input>
+                  {validationErrors.phone && <p className="text-red-500">{validationErrors.phone}</p>}
+
                 </div>
               </div>
               <div>
@@ -206,6 +295,8 @@ export function Signup() {
                     value={formData.password}
                     onChange={handleInputChange}
                   ></input>
+                  {validationErrors.password && <p className="text-red-500">{validationErrors.password}</p>}
+
                 </div>
               </div>
               <div>
@@ -228,6 +319,8 @@ export function Signup() {
                     value={formData.confirmPassword}
                     onChange={handleInputChange}
                   ></input>
+                  {validationErrors.confirmPassword && <p className="text-red-500">{validationErrors.confirmPassword}</p>}
+
                 </div>
               </div>
               <div>
@@ -241,27 +334,29 @@ export function Signup() {
                   </label>
                 </div>
                 <div className="mt-2">
-                <select
-        name="collegeId"
-        value={+formData.collegeId}
-        onChange={handleInputChange}
-        className="flex h-10 w-full rounded-md border border-gray-300 bg-transparent px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-gray-400 focus:ring-offset-1 disabled:cursor-not-allowed disabled:opacity-50"
-      >
-        <option value="">Select College Name</option>
-        {loadingColleges ? (
-          <option value="" disabled>Loading Colleges...</option>
-        ) : (
-          colleges.map((college) => (
-            
-            <option key={college.id} value={college.id}>
-              {college.collegeName}
-            </option>
-            
-          ))
-        )}
-      </select>
+                  <select
+                    name="collegeId"
+                    value={+formData.collegeId}
+                    onChange={handleInputChange}
+                    className="flex h-10 w-full rounded-md border border-gray-300 bg-transparent px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-gray-400 focus:ring-offset-1 disabled:cursor-not-allowed disabled:opacity-50"
+                  >
+                    <option value="">Select College Name</option>
+                    {loadingColleges ? (
+                      <option value="" disabled>Loading Colleges...</option>
+                    ) : (
+                      colleges.map((college) => (
+
+                        <option key={college.id} value={college.id}>
+                          {college.collegeName}
+                        </option>
+
+                      ))
+                    )}
+                  </select>
+                  {validationErrors.collegeId && <p className="text-red-500">{validationErrors.collegeId}</p>}
+
                 </div>
-              </div> 
+              </div>
               <div>
                 <button
                   type="submit"
@@ -274,11 +369,11 @@ export function Signup() {
           </form>
         </div>
       </div>
-      {isLoading&&<Loader/>}
+      {isLoading && <Loader />}
 
       {showPopup && <PopupComponent onClose={handleClosePopup} isSuccess={true} message={popupMessage} />}
-
+      {showerrorpopup&& <PopupComponent onClose={handleerrorPopup} isSuccess={false} message={signupError?.response?.data?.error} />}
     </section>
-    
+
   );
 }

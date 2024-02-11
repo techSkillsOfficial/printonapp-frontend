@@ -10,8 +10,10 @@ import {
   Contact,
   Userdashboard,
   Thesisform,
+  Order,
 } from "./component/index.js";
 import {
+  Navigate,
   Route,
   RouterProvider,
   createBrowserRouter,
@@ -35,6 +37,7 @@ const router = createBrowserRouter(
     </Route>
   )
 );
+
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>

@@ -30,7 +30,7 @@ export function Navbar() {
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
   const user = useSelector((state) => state.auth?.user?.username);
   //const user=authuser?.first_name
-  console.log("user",user)
+  console.log("user", user)
 
   const isAuth = () => {
     const token = localStorage.getItem("access_token")
@@ -77,10 +77,10 @@ export function Navbar() {
           </ul>
         </div>
         <div className="hidden space-x-2 lg:block m-4">
-          {isAuthenticated?(<Link
-              to="/userdashboard"
-              className=" px-3 py-2 text-sm font-semibold text-black  focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black hover:animate-pulse"
-            >{(user.first_name).toUpperCase()}</Link>):<></>}
+          {isAuthenticated ? (<Link
+            to="/userdashboard"
+            className=" px-3 py-2 text-sm font-semibold text-black  focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black hover:animate-pulse"
+          >{(user.first_name).toUpperCase()}</Link>) : <></>}
         </div>
 
         <div className="hidden space-x-2 lg:block">
@@ -150,14 +150,27 @@ export function Navbar() {
                     ))}
                   </nav>
                 </div>
-                <div className="mt-2 space-y-2">
-                  <button
-                    type="button"
-                    className="w-full rounded-md border border-black px-3 py-2 text-sm font-semibold text-black shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black"
-                  >
-                    Sign In
-                  </button>
-                </div>
+                <div className="mt-2 space-y-2 flex flex-col items-center">
+  {isAuthenticated ? (
+    <button
+      type="button"
+      className="rounded-md border border-black px-3 py-2 text-sm font-semibold text-black shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black"
+      onClick={handleLogout}
+    >
+      
+      <span className="text-center">Logout</span>
+    </button>
+  ) : (
+    <Link
+      to="/signin"
+      type="button"
+      className="w-full rounded-md border border-black px-3 py-2 text-sm font-semibold text-black shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black"
+    >
+      <span className="text-center">Sign In</span>
+    </Link>
+  )}
+</div>
+
               </div>
             </div>
           </div>
