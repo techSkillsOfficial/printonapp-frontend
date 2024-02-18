@@ -65,7 +65,15 @@ export const login = (formData, navigate) => {
         dispatch(loginSuccess(user));
 
         // Redirect to another page or perform other actions
-        navigate('/Userdashboard');
+        console.log("role",response.data.data.role)
+        if(response.data.data.role=='ADMIN'){
+        navigate('/Admindashboard');
+
+        }
+        else{
+
+          navigate('/Userdashboard');
+        }
       } else {
         console.error('Access token not found in API response.');
       }

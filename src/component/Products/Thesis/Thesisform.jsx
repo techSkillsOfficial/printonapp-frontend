@@ -8,9 +8,9 @@ import { useNavigate } from "react-router-dom";
 import Loader from "../../Loader/Loader";
 
 const Thesisform = () => {
-  const [printColor, setPrintColor] = useState("B&W");
+  const [printColor, setPrintColor] = useState("");
   const [colorPages, setColorPages] = useState("");
-  const [paperType, setPaperType] = useState("Bond");
+  const [paperType, setPaperType] = useState("");
   const [pdfFile, setPdfFile] = useState(null);
   const [description, setDescription] = useState("");
   const [totalPrice, setTotalPrice] = useState(0);
@@ -23,6 +23,15 @@ const Thesisform = () => {
   const [filepath,setfilepath]=useState('')
   const [loading,setloading]=useState(false)
   const [errors, setErrors] = useState({});
+
+
+
+  const [touched, setTouched] = useState({
+    printColor: false,
+    colorPages: false,
+    pdfFile: false,
+    selectedQty: false,
+  });
 
   // Calculate the base price for hard binding
   let tempTotalPrice = 200;
@@ -87,15 +96,24 @@ const Thesisform = () => {
     };
 
     useEffect(()=>{
+    const isFormTouched = Object.values(touched).some(value => value);
+    if (isFormTouched) {
+
       validateForm()
-  },[selectedQty,pdfFile,paperType,printColor])
+    }
+  },[selectedQty,pdfFile,paperType,printColor,touched])
 
 
   const handlePdfFileChange = (e) => {
+    
     const file = e.target.files[0];
     if (file && file.type === "application/pdf") {
       setPdfFile(file);
       calculateNumPages(file);
+      setTouched((prevTouched) => ({
+        ...prevTouched,
+        pdfFile: true,
+      }));
 
       
       console.log("token",token)
@@ -239,9 +257,19 @@ const Thesisform = () => {
             id="printColor"
             name="printColor"
             value={printColor}
-            onChange={(e) => setPrintColor(e.target.value)}
+            onChange={(e) => {
+              setPrintColor(e.target.value);
+              // Set touched for the select element
+              setTouched((prevTouched) => ({
+                ...prevTouched,
+                printColor: true,
+              }));
+            }}
             className="mt-1 block w-full border rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
           >
+            <option value="" disabled>
+              Select type
+            </option>
             <option value="B&W">B&W</option>
             <option value="Color">Color</option>
             <option value="Both">Both</option>
@@ -263,7 +291,13 @@ const Thesisform = () => {
               id="colorPages"
               name="colorPages"
               value={colorPages}
-              onChange={(e) => setColorPages(e.target.value)}
+              onChange={(e) => {setColorPages(e.target.value)
+                setTouched((prevTouched) => ({
+                  ...prevTouched,
+                  colorPages: true,
+                }));
+              }
+              }
               className="mt-1 block w-full border rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
             />
             {errors.colorPages && <p className="text-red-500">{errors.colorPages}</p>}
@@ -289,9 +323,18 @@ const Thesisform = () => {
             id="paperType"
             name="paperType"
             value={paperType}
-            onChange={(e) => setPaperType(e.target.value)}
+            onChange={(e) => {setPaperType(e.target.value)
+              setTouched((prevTouched) => ({
+                ...prevTouched,
+                paperType: true,
+              }));
+            }
+            }
             className="mt-1 block w-full border rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
           >
+            <option value="" disabled>
+              Select paper type
+            </option>
             <option value="Bond">Bond</option>
             <option value="Normal">Normal</option>
           </select>
@@ -357,7 +400,12 @@ const Thesisform = () => {
             id="quantity"
             name="quantity"
             value={selectedQty}
-            onChange={(e) => {setSelectedQty(e.target.value)}}
+            onChange={(e) => {setSelectedQty(e.target.value)
+              setTouched((prevTouched) => ({
+                ...prevTouched,
+                selectedQty: true,
+              }));
+            }}
             onMouseOut={() => ShowPrice()}
             className="mt-1 block w-full border rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
           >

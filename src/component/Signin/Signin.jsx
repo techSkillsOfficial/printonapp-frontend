@@ -43,26 +43,37 @@ export function Signin() {
   };
 
   useEffect(() => {
+
+    const isFormTouched = Object.values(touched).some(value => value);
     const errors = {};
+    if (isFormTouched) {
     if (!formData.email.trim()) {
       errors.email = 'Email is required';
     } else {
-      errors.email = '';
+      
     }
 
     if (!formData.password.trim()) {
       errors.password = 'Password is required';
     } else {
-      errors.password = '';
+      
     }
 
     setValidationErrors(errors);
-  }, [formData, touched]);
+  }
+  }, [formData,touched]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    const allFieldsTouched = Object.keys(formData).reduce((acc, key) => {
+      acc[key] = true;
+      return acc;
+    }, {});
+  
+    setTouched(allFieldsTouched);
     console.log("error?.response?.data",error?.response?.data)
-    if (!validationErrors.email && !validationErrors.password) {
+    console.log("Object.keys(validationErrors).length",Object.keys(validationErrors).length)
+    if (Object.keys(validationErrors).length === 0) {
       dispatch(login(formData, navigate));
     }
 

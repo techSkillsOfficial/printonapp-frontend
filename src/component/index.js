@@ -10,10 +10,11 @@ import { Profile } from "./Profile/Profile.jsx";
 import { Thesis } from "./Products/Thesis/Thesis.jsx";
 import Thesisform from "./Products/Thesis/Thesisform.jsx"
 import Order from "./Order/Order.jsx"
+import Admindashboard from "./Dashboard/Admindashboard.jsx";
 
 
 
 
 
 
-export { Navbar, Footer, Signin, Signup, Home, About, Contact, Userdashboard,Profile,Thesis,Thesisform ,Order} 
+export { Navbar, Footer, Signin, Signup, Home, About, Contact, Userdashboard,Profile,Thesis,Thesisform ,Order,Admindashboard} 

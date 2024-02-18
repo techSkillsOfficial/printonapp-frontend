@@ -19,10 +19,29 @@ export function Signup() {
     role: "USER",
     collegeId: "", // College Name will be selected from the dropdown
   });
+  const [touched, setTouched] = useState({
+    first_name: false,
+    last_name: false,
+    email: false,
+    password: false,
+    confirmPassword: false,
+    phone: false,
+    role: false,
+    collegeId: false
+  });
   const [showPopup, setShowPopup] = useState(false);
   const isLoading = useSelector((state) => state.auth.loading);
   const [popupMessage, setPopupMessage] = useState('');
-  const [validationErrors, setValidationErrors] = useState({});
+  const [validationErrors, setValidationErrors] = useState({
+    first_name: '',
+    last_name: '',
+    email: '',
+    password: '',
+    confirmPassword: '',
+    phone: '',
+    
+    collegeId: '',
+  });
   const signupError = useSelector((state) => state.auth.error);
   const [showerrorpopup,setshowerrorpopup]=useState(false);
 
@@ -34,11 +53,18 @@ export function Signup() {
       ...prevData,
       [name]: processedValue,
     }));
+    setTouched((prevTouched) => ({
+      ...prevTouched,
+      [name]: true,
+    }));
     console.log(formData);
   };
 
   useEffect(() => {
+    const isFormTouched = Object.values(touched).some(value => value);
+console.log("isFormTouched",isFormTouched)
     const errors = {};
+    if (isFormTouched) {
     if (!formData.first_name.trim()) {
       errors.first_name = "First name is required";
     }
@@ -66,9 +92,9 @@ export function Signup() {
     if (!formData.collegeId) {
       errors.collegeId = "College name is required";
     }
-
     setValidationErrors(errors);
-  }, [formData]);
+  }
+  }, [formData,touched]);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const handleSubmit = (e) => {
@@ -102,7 +128,16 @@ export function Signup() {
     // }
     //console.log("signupError",signupError.response.data.error)
     
+
     e.preventDefault();
+
+    const allFieldsTouched = Object.keys(formData).reduce((acc, key) => {
+      acc[key] = true;
+      return acc;
+    }, {});
+    setTouched(allFieldsTouched);
+    console.log("Object.keys(validationErrors).length",Object.keys(validationErrors).length)
+
     if (Object.keys(validationErrors).length === 0) {
 
     

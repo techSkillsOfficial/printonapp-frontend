@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
 import { useEffect, useRef, useState } from "react";
+import { useSelector } from "react-redux";
 import { Link, NavLink, useNavigate } from "react-router-dom";
 
 const ShuffleHero = () => {
@@ -7,6 +8,10 @@ const ShuffleHero = () => {
   const handleClick = () => {
     navigate("/signup");
   };
+  const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
+  const handleClickAbout=() => {
+    navigate("/about");
+  }
 
   return (
     <section className="w-full px-8 py-12 grid grid-cols-1 md:grid-cols-2 items-center gap-8 max-w-6xl mx-auto">
@@ -21,12 +26,22 @@ const ShuffleHero = () => {
           Lorem ipsum dolor sit amet consectetur, adipisicing elit. Nam nobis in
           error repellat voluptatibus ad.
         </p>
-        <button
+        {isAuthenticated ? (
+          <button
+          className="bg-gray-800 text-white font-medium py-2 px-4 rounded transition-all hover:bg-black active:scale-95"
+          onClick={handleClickAbout}
+        >About us!
+          
+        </button>
+        
+        ):(
+          <button
           className="bg-gray-800 text-white font-medium py-2 px-4 rounded transition-all hover:bg-black active:scale-95"
           onClick={handleClick}
-        >
-          Create Account Now
+        >Create Account Now
+          
         </button>
+        )}
       </div>
       <ShuffleGrid />
     </section>

@@ -10,6 +10,7 @@ import {
   Contact,
   Userdashboard,
   Thesisform,
+  Admindashboard,
   Order,
 } from "./component/index.js";
 import {
@@ -19,8 +20,10 @@ import {
   createBrowserRouter,
   createRoutesFromElements,
 } from "react-router-dom";
-import { Provider } from "react-redux";
+import { Provider, useSelector } from "react-redux";
 import store from "./store/store.js";
+import PrivateRoute from "./privateroute.jsx";
+//import Admindashboard from "./component/Dashboard/Admindashboard.jsx";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -31,8 +34,9 @@ const router = createBrowserRouter(
       <Route path="home" element={<Home />} />
       <Route path="about" element={<About />} />
       <Route path="contact" element={<Contact />} />
-      <Route path="Userdashboard" element={<Userdashboard />} />
-      <Route path="thesisform" element={<Thesisform />} />
+      <Route path="Userdashboard" element={<PrivateRoute Component ={Userdashboard} />} />
+      <Route path="Admindashboard" element={<PrivateRoute Component ={Admindashboard} />} />
+      <Route path="thesisform" element={<PrivateRoute Component ={Thesisform} />} />
       {/* </Route> */}
     </Route>
   )
