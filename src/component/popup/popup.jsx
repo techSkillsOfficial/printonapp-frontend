@@ -11,7 +11,7 @@ const PopupComponent = ({ onClose, isSuccess, message }) => {
         <p className="text-lg font-semibold mb-4">{message}</p>
         <button
           onClick={onClose}
-          className={`text-white px-4 py-2 rounded-md hover:bg-blue-600 focus:outline-none focus:ring focus:border-blue-300 ${buttonBgColor}`}
+          className={`text-white px-4 py-2 rounded-md hover:bg-gray-600 focus:outline-none focus:ring focus:border-gray-300 ${buttonBgColor}`}
         >
           Close
         </button>

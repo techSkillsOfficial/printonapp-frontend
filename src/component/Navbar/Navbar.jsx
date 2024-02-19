@@ -78,7 +78,7 @@ export function Navbar() {
         </div>
         <div className="hidden space-x-2 lg:block m-4">
           {isAuthenticated ? (<Link
-            to="/userdashboard"
+            to={user.role=='ADMIN'?"/Admindashboard":"Userdashboard"}
             className=" px-3 py-2 text-sm font-semibold text-black  focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black hover:animate-pulse"
           >{(user.first_name).toUpperCase()}</Link>) : <></>}
         </div>
