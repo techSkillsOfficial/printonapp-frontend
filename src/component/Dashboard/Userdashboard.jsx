@@ -133,6 +133,12 @@ const Userashboard = () => {
                           scope="col"
                           className="px-4 py-3.5 text-left text-sm font-normal text-gray-700"
                         >
+                          Id
+                        </th>
+                        <th
+                          scope="col"
+                          className="px-4 py-3.5 text-left text-sm font-normal text-gray-700"
+                        >
                           Qty
                         </th>
                         <th
@@ -176,6 +182,9 @@ const Userashboard = () => {
                     <tbody className="divide-y divide-gray-200 bg-white">
                       {thesis.map((person) => (
                         <tr key={person.id}>
+                          <td className="whitespace-nowrap px-4 py-4">
+                            {person.id}
+                          </td>
                           <td className="whitespace-nowrap px-4 py-4">
                             {person.qty}
                           </td>
