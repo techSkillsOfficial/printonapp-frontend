@@ -2,6 +2,8 @@ import axios from 'axios';
 import React, { useEffect, useState } from 'react'
 import { useSelector } from "react-redux";
 import { Link } from 'react-router-dom';
+import { FiEdit, FiMail,FiBook, FiUser,FiBarChart, FiUsers } from "react-icons/fi";
+
 function Usertable() {
 
     const [thesis, setThesis] = useState([]);
@@ -293,20 +295,29 @@ function Usertable() {
                                                         </Link>
                                                     </td>
                                                     <td className="whitespace-nowrap px-4 py-4">
-                                                        <a href="#">
+                                                        {/* <a href="#">
                                                             <img
                                                                 width="25"
                                                                 height="25"
                                                                 src="https://img.icons8.com/ultraviolet/40/edit.png"
                                                                 alt="edit"
                                                             />
-                                                        </a>
+                                                        </a> */}
 
                                                         {/* Render other action buttons */}
                                                         {editingId === person.id ? (
-                                                            <button onClick={() => handleSave(person.id, person.description)}>Save</button>
+                                                            <button onClick={() => handleSave(person.id, person.description)}>
+                                                                <img width="30" height="30" src="https://img.icons8.com/ultraviolet/40/save.png" alt="save"/>
+                                                                </button>
                                                         ) : (
-                                                            <button onClick={() => handleEdit(person.id)}>Edit</button>
+                                                            <button onClick={() => handleEdit(person.id)}>
+                                                                <img
+                                                                width="25"
+                                                                height="25"
+                                                                src="https://img.icons8.com/ultraviolet/40/edit.png"
+                                                                alt="edit"
+                                                            />
+                                                                </button>
                                                         )}
 
                                                     </td>
