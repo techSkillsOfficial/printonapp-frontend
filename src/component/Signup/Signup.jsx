@@ -60,6 +60,24 @@ export function Signup() {
     console.log(formData);
   };
 
+  const [emailExists, setEmailExists] = useState(false);
+  useEffect(() => {
+    // Check if email already exists
+    const checkEmailExists = async () => {
+      try {
+        const response = await axios.get(`https://printonapp-gacom.ondigitalocean.app/users/IsEmailExists?email=${formData.email}`);
+        console.log("response",response.data)
+        setEmailExists(response.data.data);
+      } catch (error) {
+        console.error('Error checking email:', error);
+      }
+    };
+
+    if (formData.email && touched.email) {
+      checkEmailExists();
+    }
+  }, [formData.email, touched.email]);
+
   useEffect(() => {
     const isFormTouched = Object.values(touched).some(value => value);
 console.log("isFormTouched",isFormTouched)
@@ -138,7 +156,7 @@ console.log("isFormTouched",isFormTouched)
     setTouched(allFieldsTouched);
     console.log("Object.keys(validationErrors).length",Object.keys(validationErrors).length)
 
-    if (Object.keys(validationErrors).length === 0) {
+    if (Object.keys(validationErrors).length === 0&&!emailExists) {
 
     
     const { confirmPassword, ...signupData } = formData;
@@ -282,6 +300,7 @@ console.log("isFormTouched",isFormTouched)
                     value={formData.email}
                     onChange={handleInputChange}
                   ></input>
+                  {emailExists && <p className="text-red-500">Email already exists. Please use a different email.</p>}
                   {validationErrors.email && <p className="text-red-500">{validationErrors.email}</p>}
 
                 </div>
