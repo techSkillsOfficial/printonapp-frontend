@@ -76,14 +76,14 @@ export function Navbar() {
             ))}
           </ul>
         </div>
-        <div className="hidden space-x-2 lg:block m-4">
+        <div className="hidden space-x-2 lg:block">
           {isAuthenticated ? (<Link
             to={user.role=='ADMIN'?"/Admindashboard":"Userdashboard"}
             className=" px-3 py-2 text-sm font-semibold text-black  focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black hover:animate-pulse"
           >{(user.first_name).toUpperCase()}</Link>) : <></>}
         </div>
 
-        <div className="hidden space-x-2 lg:block">
+        <div className="hidden space-x-2 lg:block m-2">
           {console.log("isAuth", isAuth)}
           {isAuthenticated ? (
 
@@ -95,12 +95,13 @@ export function Navbar() {
               Logout
             </button>
           ) : (
-            <Link
-              to="/signin"
+            <button
+            onClick={()=>{navigate("/signin")}}
+              
               className="rounded-md border border-black px-3 py-2 text-sm font-semibold text-black shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black"
             >
               Sign In
-            </Link>
+            </button>
           )}
         </div>
         <div className="lg:hidden">

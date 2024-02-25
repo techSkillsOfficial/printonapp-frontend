@@ -13,6 +13,7 @@ import {
   Admindashboard,
   Usertable,
   Order,
+  Admintable,
 } from "./component/index.js";
 import {
   Navigate,
@@ -36,6 +37,7 @@ const router = createBrowserRouter(
       <Route path="about" element={<About />} />
       <Route path="contact" element={<Contact />} />
       <Route path="Usertable" element={<Usertable />}/>
+      <Route path="Admintable" element={<Admintable />}/>
       <Route path="Userdashboard" element={<PrivateRoute Component ={Userdashboard} />} />
       <Route path="Admindashboard" element={<PrivateRoute Component ={Admindashboard} />} />
       <Route path="thesisform" element={<PrivateRoute Component ={Thesisform} />} />

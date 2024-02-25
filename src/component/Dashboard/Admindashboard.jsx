@@ -13,7 +13,7 @@ const HoverDevCards = () => {
           href="#"
           Icon={FiUser}
         />
-        <DashboardCard title="Order's" subtitle="Check your order status" href="#" Icon={FiBook} />
+        <DashboardCard title="Order's" subtitle="Check your order status" href="/Admintable" Icon={FiBook} />
         {/* <DashboardCard title="Team" subtitle="Manage team" href="#" Icon={FiUsers} />
         <DashboardCard
           title="Billing"

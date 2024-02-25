@@ -2,29 +2,51 @@ import axios from 'axios';
 import React, { useEffect, useState } from 'react'
 import { useSelector } from "react-redux";
 import { Link } from 'react-router-dom';
-import { FiEdit, FiMail,FiBook, FiUser,FiBarChart, FiUsers } from "react-icons/fi";
+import { FiEdit, FiMail, FiBook, FiUser, FiBarChart, FiUsers } from "react-icons/fi";
 
-function Usertable() {
+function Admintable() {
 
     const [thesis, setThesis] = useState([]);
     const token = useSelector((state) => state.auth.user.username.access_token)
     const [editingId, setEditingId] = useState(null);
     const [currentPage, setCurrentPage] = useState(1);
     const [totalPages, setTotalPages] = useState(1);
+    const [selectedCollegeId, setSelectedCollegeId] = useState(""); // State for selected college ID
+    const [formData, setFormData] = useState({ collegeId: "" }); // State for form data
+    const [loadingColleges, setLoadingColleges] = useState(true);
+    const [colleges, setColleges] = useState([]);
     useEffect(() => {
         // Fetch data from API on component mount
         fetchData();
-    }, [currentPage]);
+    }, [currentPage, selectedCollegeId]);
 
     const handleEdit = (id) => {
         setEditingId(id); // Set the ID of the item being edited
     };
+
+    useEffect(() => {
+        const fetchColleges = async () => {
+            try {
+                const response = await axios.get('https://printonapp-gacom.ondigitalocean.app/homepage/colleges');
+                console.log("response.dataresponse.data", response.data)
+                setColleges(response.data.data); // assuming the response is an array of colleges
+            } catch (error) {
+                console.error('Error fetching colleges:', error);
+            } finally {
+                setLoadingColleges(false);
+            }
+        };
+
+        fetchColleges();
+    }, []);
+
     const fetchData = async () => {
         try {
 
             const params = {
                 pageSize: 10,
                 page: currentPage,
+                collegeId: selectedCollegeId
             }
             const response = await axios.get('https://printonapp-gacom.ondigitalocean.app/admin/thesis'
                 , {
@@ -43,17 +65,16 @@ function Usertable() {
     };
 
 
-    
     const handleGetById = async (id) => {
         try {
             const response = await axios.get(`https://printonapp-gacom.ondigitalocean.app/admin/thesis/${id}`
-            ,{
-                headers: {
-                    Authorization: `Bearer ${token}`
-                },
-            }
+                , {
+                    headers: {
+                        Authorization: `Bearer ${token}`
+                    },
+                }
             );
-            console.log("res",response.data.data)
+            console.log("res", response.data.data)
             setThesis(response.data.data)
             // Handle response
         } catch (error) {
@@ -65,13 +86,13 @@ function Usertable() {
         try {
             // Send API request to update the description
 
-            const response =await axios.patch(`https://printonapp-gacom.ondigitalocean.app/admin/thesis`, { description: newDescription,id:id }, {
+            const response = await axios.patch(`https://printonapp-gacom.ondigitalocean.app/admin/thesis`, { description: newDescription, id: id }, {
                 headers: {
                     Authorization: `Bearer ${token}`
                 },
             });
             // Reset editing state
-            console.log("response",response)
+            console.log("response", response)
             setEditingId(null);
             // Refetch data or update local state
             fetchData();
@@ -157,6 +178,9 @@ function Usertable() {
     const handlePageChange = (page) => {
         setCurrentPage(page);
     };
+    const handleCollegeChange = (e) => {
+        setSelectedCollegeId(e.target.value);
+    };
 
     const getStatusColor = (status) => {
         switch (status) {
@@ -173,6 +197,28 @@ function Usertable() {
     return (
         <div className="grid sm:grid-cols-12 grid-cols-6 gap-1 min-h-screen ">
             <div className="sm:col-span-12 col-span-4 border border-gray-100">
+                <div className="mt-2 flex justify-end">
+                    <select
+                        name="collegeId"
+                        value={formData.collegeId}
+                        onChange={(e) => {
+                            setFormData({ ...formData, collegeId: e.target.value });
+                            handleCollegeChange(e);
+                        }}
+                        className="flex h-10 w-64 rounded-md border border-gray-300 bg-transparent px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-gray-400 focus:ring-offset-1 disabled:cursor-not-allowed disabled:opacity-50">
+                        <option value="">Select College Name</option>
+                        {/* Render colleges options */}
+                        {loadingColleges ? (
+                            <option value="" disabled>Loading Colleges...</option>
+                        ) : (
+                            colleges.map((college) => (
+                                <option key={college.id} value={college.id}>
+                                    {college.collegeName}
+                                </option>
+                            ))
+                        )}
+                    </select>
+                </div>
                 <section className="mx-auto w-full max-w-7xl px-4 py-4">
                     <div className="flex flex-col space-y-4 md:flex-row md:items-center md:justify-between md:space-y-0">
                         <div>
@@ -248,14 +294,14 @@ function Usertable() {
                                                 <tr key={person.id}>
                                                     <td className="whitespace-nowrap px-4 py-4">
                                                         <button onClick={() => handleGetById(person.id)}>
-                                                        {person.id}
+                                                            {person.id}
                                                         </button>
                                                     </td>
                                                     <td className="whitespace-nowrap px-4 py-4">
                                                         <button onClick={() => handleGetById(person.id)}>
-                                                        {person.quantity}
+                                                            {person.quantity}
                                                         </button>
-                                                        
+
                                                     </td>
                                                     <td className="whitespace-nowrap px-4 py-4">
                                                         {person.created_on}
@@ -286,7 +332,7 @@ function Usertable() {
                                                         ) : (
                                                             // Render description as text otherwise
                                                             <button onClick={() => handleGetById(person.id)}>
-                                                            <span>{person.description.length > 50 ? person.description.substring(0, 50) + '...' : person.description}</span>
+                                                                <span>{person.description.length > 50 ? person.description.substring(0, 50) + '...' : person.description}</span>
                                                             </button>
                                                         )}
                                                     </td>
@@ -316,17 +362,17 @@ function Usertable() {
                                                         {/* Render other action buttons */}
                                                         {editingId === person.id ? (
                                                             <button onClick={() => handleSave(person.id, person.description)}>
-                                                                <img width="30" height="30" src="https://img.icons8.com/ultraviolet/40/save.png" alt="save"/>
-                                                                </button>
+                                                                <img width="30" height="30" src="https://img.icons8.com/ultraviolet/40/save.png" alt="save" />
+                                                            </button>
                                                         ) : (
                                                             <button onClick={() => handleEdit(person.id)}>
                                                                 <img
-                                                                width="25"
-                                                                height="25"
-                                                                src="https://img.icons8.com/ultraviolet/40/edit.png"
-                                                                alt="edit"
-                                                            />
-                                                                </button>
+                                                                    width="25"
+                                                                    height="25"
+                                                                    src="https://img.icons8.com/ultraviolet/40/edit.png"
+                                                                    alt="edit"
+                                                                />
+                                                            </button>
                                                         )}
 
                                                     </td>
@@ -361,4 +407,4 @@ function Usertable() {
     )
 }
 
-export default Usertable
+export default Admintable

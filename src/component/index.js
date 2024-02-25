@@ -12,11 +12,11 @@ import Thesisform from "./Products/Thesis/Thesisform.jsx"
 import Order from "./Order/Order.jsx"
 import Admindashboard from "./Dashboard/Admindashboard.jsx";
 import Usertable from './table/Usertable';
+import Admintable from "./table/Admintable.jsx";
 
 
 
 
 
-
-export { Navbar, Footer, Signin, Signup, Home, About, Contact, Userdashboard,Profile,Thesis,Thesisform ,Order,Admindashboard,Usertable
+export { Navbar, Footer, Signin, Signup, Home, About, Contact, Userdashboard,Profile,Thesis,Thesisform ,Order,Admindashboard,Usertable,Admintable
 } 
