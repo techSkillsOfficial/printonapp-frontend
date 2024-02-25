@@ -179,6 +179,16 @@ function Usertable() {
         return "bg-red-100 text-red-800"; // Default color if status doesn't match any case
     }
   };
+  function formatDate(dateTimeString) {
+    const date = new Date(dateTimeString);
+    const day = String(date.getDate()).padStart(2, '0');
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const year = String(date.getFullYear()).slice(-2);
+    const hours = String((date.getHours() % 12) || 12).padStart(2, '0');
+    const minutes = String(date.getMinutes()).padStart(2, '0');
+    const ampm = date.getHours() >= 12 ? 'PM' : 'AM';
+    return `${day}-${month}-${year} ${hours}:${minutes} ${ampm}`;
+  }
   return (
     <div className="min-h-screen ">
       {/* <div className="grid sm:grid-cols-12 grid-cols-6 gap-1 min-h-screen "> */}
@@ -267,7 +277,7 @@ function Usertable() {
                             </button>
                           </td>
                           <td className="whitespace-nowrap px-4 py-4">
-                            {person.created_on}
+                            {formatDate(person.created_on)}
                           </td>
                           <td className="whitespace-nowrap px-4 py-4">
                             <span
