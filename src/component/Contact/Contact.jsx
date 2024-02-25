@@ -20,19 +20,14 @@ const menuItems = [
 
 const locations = [
   {
-    title: 'Bengaluru office',
-    timings: 'Mon-Sat 9am to 5pm.',
-    address: '100, Electronic City Phase-1, Bengaluru, Karnataka 560100 IN',
+    title: "Meerut office",
+    timings: "Mon-Sat 9am to 5pm.",
+    address: "MIT & MIET,N.H. 58, Delhi-Roorkee Highway, Baghpat Bypass Road Crossing, Meerut, Uttar Pradesh 250005",
   },
   {
-    title: 'Head office',
-    timings: 'Mon-Sat 9am to 5pm.',
-    address: '12th Main Rd, Indiranagar, Bengaluru, Karnataka 560008 IN',
-  },
-  {
-    title: 'Karnataka office',
-    timings: 'Mon-Sat 9am to 5pm.',
-    address: '42, Residency Rd, Shanthala Nagar, Ashok Nagar, Bengaluru, Karnataka 560025 IN',
+    title: "Ghaziabad office",
+    timings: "Mon-Sat 9am to 5pm.",
+    address: "IPEC,Plot No 63, Site IV, Surya Nagar, Flyover Road, Industrial Area, Sahibabad, Ghaziabad, Uttar Pradesh",
   },
 ]
 
