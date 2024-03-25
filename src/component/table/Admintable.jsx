@@ -10,6 +10,7 @@ import {
   FiBarChart,
   FiUsers,
 } from "react-icons/fi";
+import Loader from "../Loader/Loader";
 
 function Admintable() {
   const [thesis, setThesis] = useState([]);
@@ -21,6 +22,8 @@ function Admintable() {
   const [formData, setFormData] = useState({ collegeId: "" }); // State for form data
   const [loadingColleges, setLoadingColleges] = useState(true);
   const [colleges, setColleges] = useState([]);
+
+  const [loading, setLoading] = useState(false);
   useEffect(() => {
     // Fetch data from API on component mount
     fetchData();
@@ -49,7 +52,11 @@ function Admintable() {
   }, []);
 
   const fetchData = async () => {
+    setLoading(true);
     try {
+      if(selectedCollegeId){
+
+      
       const params = {
         pageSize: 10,
         page: currentPage,
@@ -68,8 +75,17 @@ function Admintable() {
       console.log("response.data", response.data.data);
       setThesis(response.data.data.data);
       setTotalPages(response.data.data.total_page);
+      }
+      else {
+        // Handle the case when no college is selected
+        setThesis([]);
+        setTotalPages(1); // Reset total pages
+      }
     } catch (error) {
       console.error("Error fetching data:", error);
+    }
+    finally {
+      setLoading(false); // Set loading state to false after API call completes
     }
   };
 
@@ -91,13 +107,15 @@ function Admintable() {
     }
   };
 
-  const handleSave = async (id, newDescription) => {
+  const handleSave = async (id, newDescription,estimate_cost,status) => {
     try {
       // Send API request to update the description
 
       const response = await axios.patch(
         `https://printonapp-gacom.ondigitalocean.app/admin/thesis`,
-        { description: newDescription, id: id },
+        { description: newDescription, id: id,estimate_cost
+:+estimate_cost,status:status
+},
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -258,14 +276,42 @@ function Admintable() {
                             {formatDate(person.created_on)}
                           </td>
                           <td className="whitespace-nowrap px-4 py-4">
-                            <span
-                              className={`inline-flex rounded-full px-2 text-xs font-semibold leading-5 ${getStatusColor(
-                                person.status
-                              )}`}
-                            >
-                              {person.status}
-                            </span>
-                          </td>
+                    {editingId === person.id ? (
+                      <select
+                        value={person.status}
+                        onChange={(e) =>
+                          {
+                            const status = e.target.value;
+                                  // Update local state immediately
+                                  setThesis((prevThesis) =>
+                                    prevThesis.map((item) =>
+                                      item.id === person.id
+                                        ? {
+                                            ...item,
+                                            status: status,
+                                          }
+                                        : item
+                                    )
+                                  );
+                          }
+                        }
+                        style={{height:"40px"}}
+                        className="w-full h-8 border rounded-md p-2"
+                      >
+                        <option value="BOOKED">BOOKED</option>
+                        <option value="IN PROGRESS">IN PROGRESS</option>
+                        <option value="COMPLETED">COMPLETED</option>
+                      </select>
+                    ) : (
+                      <span
+                        className={`inline-flex rounded-full px-2 text-xs font-semibold leading-5 ${getStatusColor(
+                          person.status
+                        )}`}
+                      >
+                        {person.status}
+                      </span>
+                    )}
+                  </td>
                           <td className="whitespace-nowrap px-4 py-4">
                             {/* Conditionally render input field if currently editing */}
                             {editingId === person.id ? (
@@ -301,8 +347,27 @@ function Admintable() {
                             )}
                           </td>
                           <td className="whitespace-nowrap px-4 py-4">
-                            {person.estimate_cost}
-                          </td>
+                    {editingId === person.id ? (
+                      <input
+                        type="text"
+                        value={person.estimate_cost}
+                        onChange={(e) => {
+                          const newCost = e.target.value;
+                          setThesis((prevThesis) =>
+                            prevThesis.map((item) =>
+                              item.id === person.id
+                                ? { ...item, estimate_cost: newCost }
+                                : item
+                            )
+                          );
+                        }}
+                        style={{ width: "200px" }}
+                        className="w-full h-8 border rounded-md p-2"
+                      />
+                    ) : (
+                      <span>{person.estimate_cost}</span>
+                    )}
+                  </td>
                           <td className="whitespace-nowrap px-4 py-4">
                             <Link
                               to={person.pdf}
@@ -331,7 +396,7 @@ function Admintable() {
                             {editingId === person.id ? (
                               <button
                                 onClick={() =>
-                                  handleSave(person.id, person.description)
+                                  handleSave(person.id, person.description,person.estimate_cost,person.status)
                                 }
                               >
                                 <img
@@ -381,7 +446,9 @@ function Admintable() {
           </div>
         </section>
       </div>
+      {loading&&<Loader/>}
     </div>
+    
   );
 }
 

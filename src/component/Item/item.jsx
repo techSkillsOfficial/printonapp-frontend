@@ -18,11 +18,11 @@ export function Item({title,imageUrl}) {
     }
   return (
     <div className=" p-4">
-      <div className="w-[300px] max-w-[your-custom-width] mx-auto relative aspect-[16/9] h-[300px]">
+      <div className="w-[260px] max-w-[320px] mx-auto relative aspect-[16/9] h-[300px]">
         <img
           src={imageUrl}
           alt={title}
-          className="z-0 h-full w-full rounded-md object-cover"
+          className="object-cover w-full h-auto max-w-full"
         />
         <div className="absolute inset-0 rounded-md bg-gradient-to-t from-gray-900 to-transparent"></div>
         <div className="absolute bottom-4 left-4 text-left text-white">

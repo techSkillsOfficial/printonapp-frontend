@@ -44,6 +44,7 @@ export function Navbar() {
     return false
   }
   const handleLogout = () => {
+     setIsMenuOpen(false)
     localStorage.removeItem("access_token")
     dispatch(logout());
 
@@ -138,8 +139,9 @@ export function Navbar() {
                     {menuItems.map((item) => (
                       <NavLink
                         key={item.name}
-                        to={item.href}
+                        to={item.to}
                         className="-m-3 flex items-center rounded-md p-3 text-sm font-semibold hover:bg-gray-50"
+                        onClick={() => setIsMenuOpen(false)}
                       >
                         <span className="ml-3 text-base font-medium text-gray-900">
                           {item.name}
@@ -166,6 +168,7 @@ export function Navbar() {
       to="/signin"
       type="button"
       className="w-full rounded-md border border-black px-3 py-2 text-sm font-semibold text-black shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black"
+      onClick={() => setIsMenuOpen(false)} 
     >
       <span className="text-center">Sign In</span>
     </Link>
