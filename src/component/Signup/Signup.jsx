@@ -65,7 +65,7 @@ export function Signup() {
     // Check if email already exists
     const checkEmailExists = async () => {
       try {
-        const response = await axios.get(`https://printonapp-gacom.ondigitalocean.app/users/IsEmailExists?email=${formData.email}`);
+        const response = await axios.get(`https://octopus-app-aefqc.ondigitalocean.app/users/IsEmailExists?email=${formData.email}`);
         console.log("response",response.data)
         setEmailExists(response.data.data);
       } catch (error) {
@@ -187,7 +187,7 @@ console.log("isFormTouched",isFormTouched)
   useEffect(() => {
     const fetchColleges = async () => {
       try {
-        const response = await axios.get('https://printonapp-gacom.ondigitalocean.app/homepage/colleges');
+        const response = await axios.get('https://octopus-app-aefqc.ondigitalocean.app/homepage/colleges');
         console.log("response.dataresponse.data", response.data)
         setColleges(response.data.data); // assuming the response is an array of colleges
       } catch (error) {
