@@ -32,7 +32,7 @@ function Usertable() {
         page: currentPage,
       };
       const response = await axios.get(
-        "https://octopus-app-aefqc.ondigitalocean.app/admin/thesis",
+        "https://printonapp-backend-production.up.railway.app/admin/thesis",
         {
           params: params,
 
@@ -52,7 +52,7 @@ function Usertable() {
   const handleGetById = async (id) => {
     try {
       const response = await axios.get(
-        `https://octopus-app-aefqc.ondigitalocean.app/admin/thesis/${id}`,
+        `https://printonapp-backend-production.up.railway.app/admin/thesis/${id}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -72,7 +72,7 @@ function Usertable() {
       // Send API request to update the description
 
       const response = await axios.patch(
-        `https://octopus-app-aefqc.ondigitalocean.app/admin/thesis`,
+        `https://printonapp-backend-production.up.railway.app/admin/thesis`,
         { description: newDescription, id: id },
         {
           headers: {

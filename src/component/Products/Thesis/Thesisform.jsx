@@ -148,7 +148,7 @@ const Thesisform = () => {
     }
     // const formDatapdf = new FormData();
     // formDatapdf.append('pdf', pdfFile);
-    // axios.post('https://octopus-app-aefqc.ondigitalocean.app/admin/upload-pdf', formDatapdf, {
+    // axios.post('https://printonapp-backend-production.up.railway.app/admin/upload-pdf', formDatapdf, {
     //     headers: {
           
     //       Authorization: `Bearer ${token}`
@@ -176,7 +176,7 @@ const Thesisform = () => {
       formDatapdf.append('pdf', pdfFile);
 
       const pdfUploadResponse = await axios.post(
-        'https://octopus-app-aefqc.ondigitalocean.app/admin/upload-pdf',
+        'https://printonapp-backend-production.up.railway.app/admin/upload-pdf',
         formDatapdf,
         {
           headers: {
@@ -201,7 +201,7 @@ const Thesisform = () => {
       };
 
       const response = await axios.post(
-        'https://octopus-app-aefqc.ondigitalocean.app/admin/thesis',
+        'https://printonapp-backend-production.up.railway.app/admin/thesis',
         formData,
         {
           headers: {
@@ -210,7 +210,7 @@ const Thesisform = () => {
           },
         }
       );
-      // const response = await fetch('https://octopus-app-aefqc.ondigitalocean.app/admin/thesis', {
+      // const response = await fetch('https://printonapp-backend-production.up.railway.app/admin/thesis', {
       //   method: "POST",
       //   headers: {
       //     "Content-Type": "application/json",

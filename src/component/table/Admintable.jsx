@@ -37,7 +37,7 @@ function Admintable() {
     const fetchColleges = async () => {
       try {
         const response = await axios.get(
-          "https://octopus-app-aefqc.ondigitalocean.app/homepage/colleges"
+          "https://printonapp-backend-production.up.railway.app/homepage/colleges"
         );
         console.log("response.dataresponse.data", response.data);
         setColleges(response.data.data); // assuming the response is an array of colleges
@@ -63,7 +63,7 @@ function Admintable() {
         collegeId: selectedCollegeId,
       };
       const response = await axios.get(
-        "https://octopus-app-aefqc.ondigitalocean.app/admin/thesis",
+        "https://printonapp-backend-production.up.railway.app/admin/thesis",
         {
           params: params,
 
@@ -92,7 +92,7 @@ function Admintable() {
   const handleGetById = async (id) => {
     try {
       const response = await axios.get(
-        `https://octopus-app-aefqc.ondigitalocean.app/admin/thesis/${id}`,
+        `https://printonapp-backend-production.up.railway.app/admin/thesis/${id}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -112,7 +112,7 @@ function Admintable() {
       // Send API request to update the description
 
       const response = await axios.patch(
-        `https://octopus-app-aefqc.ondigitalocean.app/admin/thesis`,
+        `https://printonapp-backend-production.up.railway.app/admin/thesis`,
         { description: newDescription, id: id,estimate_cost
 :+estimate_cost,status:status
 },

@@ -46,7 +46,7 @@ export const login = (formData, navigate) => {
 
     try {
       const response = await axios.post(
-        'https://octopus-app-aefqc.ondigitalocean.app/login',
+        'https://printonapp-backend-production.up.railway.app/login',
         formData,
         {
           headers: {
@@ -94,7 +94,7 @@ export const signup = (formData, navigate) => {
   
       try {
         const response = await axios.post(
-          'https://octopus-app-aefqc.ondigitalocean.app/signup',
+          'https://printonapp-backend-production.up.railway.app/signup',
           formData,
           {
             headers: {
